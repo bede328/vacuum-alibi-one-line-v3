@@ -33,6 +33,11 @@ function main(): void {
   if (line.includes("\n") || line.includes("\r")) {
     throw new Error("entry must be a single line");
   }
+  // Reject consecutive spaces: a double space in a one-liner looks like
+  // a typo and slips past the length and single-line guards above.
+  if (line.includes("  ")) {
+    throw new Error("entry must not contain consecutive spaces");
+  }
   mkdirSync("/output", { recursive: true });
   writeFileSync("/output/entry.txt", line, "utf8");
 }
